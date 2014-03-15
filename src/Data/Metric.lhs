@@ -1,4 +1,6 @@
-Miscellaneous distance functions, specialised to real vectors.
+> {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
+Metric spaces defined over real vectors.
 
 > module Data.Metric (
 >   Metric(..),
@@ -36,7 +38,7 @@ interface.
 
 > newtype Discrete = Discrete
 >   { getDiscrete :: Vector Double
->   }
+>   } deriving (Eq, Show)
 > 
 > instance Metric Discrete where
 >   Discrete v0 <-> Discrete v1 
@@ -49,7 +51,7 @@ differences between corresponding coordinates ;-).
 
 > newtype Euclidean = Euclidean 
 >   { getEuclidean :: Vector Double 
->   }
+>   } deriving (Eq, Show)
 > 
 > instance Metric Euclidean where
 >   Euclidean v0 <-> Euclidean v1 = sqrt . foldr1 (+) . map (**2) $ zipWith (-) v0 v1
@@ -61,7 +63,7 @@ could travel by taxi on a rectangular grid of streets (think Manhattan.)
 
 > newtype Taxicab = Taxicab
 >   { getTaxicab :: Vector Double
->   }
+>   } deriving (Eq, Show)
 > 
 > instance Metric Taxicab where
 >   Taxicab v0 <-> Taxicab v1 = foldr1 (+) . map abs $ zipWith (-) v0 v1
@@ -74,7 +76,7 @@ implicitly normalising for document length.
 
 > newtype Cosine = Cosine
 >   { getCosine :: Vector Double
->   }
+>   } deriving (Eq, Show)
 > 
 > instance Metric Cosine where
 >   Cosine v0 <-> Cosine v1 = (v0 `dot` v1) / (v0 |*| v1)
@@ -97,7 +99,7 @@ dimension.
 
 > newtype Chebyshev = Chebyshev
 >   { getChebyshev :: Vector Double
->   }
+>   } deriving (Eq, Show)
 > 
 > instance Metric Chebyshev where
 >   Chebyshev v0 <-> Chebyshev v1 = maximum . map abs $ zipWith (-) v0 v1
@@ -109,7 +111,7 @@ provided the source and destination are distinct.
 
 > newtype PostOffice = PostOffice
 >   { getPostOffice :: Vector Double
->   }
+>   } deriving (Eq, Show)
 > 
 > instance Metric PostOffice where
 >   PostOffice v0 <-> PostOffice v1 
