@@ -6,27 +6,28 @@ function (M -> M), forall a,b,c in M:
 > 
 > import Data.Metric (Metric(..))
 > import Test.QuickCheck (Property, conjoin, label)
+> import Numeric.Approximate (Approximate(..)) -- Floating point comparison is unreliable. 
 
   * Non-Negativity: d(a,b) >= 0
 
 > prop_MetricNegative :: Metric a => a -> a -> Bool
-> prop_MetricNegative a b = (a <-> b) >= 0
+> prop_MetricNegative a b = (a <-> b) >=~ 0
 
   * Identity of Indiscernables: d(x,y) = 0 <=> x = y
 
 > prop_MetricIndiscernable :: (Eq a, Metric a) => a -> a -> Bool
-> prop_MetricIndiscernable a b = ((a <-> b) == 0) == (a == b)
->                             && (a == b) == ((a <-> b) == 0)
+> prop_MetricIndiscernable a b = ((a <-> b) =~ 0) == (a == b)
+>                             && (a == b) == ((a <-> b) =~ 0)
 
   * Symmetry: d(x,y) = d(y,x)
 
 > prop_MetricSymmetry :: Metric a => a -> a -> Bool
-> prop_MetricSymmetry x y = (x <-> y) == (y <-> x)
+> prop_MetricSymmetry x y = (x <-> y) =~ (y <-> x)
 
   * Triangle Inequality: d(x,z) <= d(x,y) + d(y,z)
   
 > prop_MetricTriangle :: Metric a => a -> a -> a -> Bool
-> prop_MetricTriangle x y z = (x <-> z) <= (x <-> y) + (y <-> z)
+> prop_MetricTriangle x y z = (x <-> z) <=~ ((x <-> y) + (y <-> z))
 
 All together now:
 
