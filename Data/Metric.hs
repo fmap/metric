@@ -1,7 +1,7 @@
 module Data.Metric where
 
-import Prelude hiding (zipWith, map, foldr1)
-import Data.Vector (Vector(..), zipWith, map, foldr1)
+import Prelude hiding (zipWith, map, foldr1, minimum)
+import Data.Vector (Vector(..), zipWith, map, foldr1, minimum)
 
 class Metric a where
   (<->) :: a -> a -> Double
@@ -45,3 +45,12 @@ norm = sqrt . foldr1 (+) . map (**2)
 
 instance Metric Cosine where
   Cosine v0 <-> Cosine v1 = (v0 `dot` v1) / (norm v0 * norm v1)
+
+newtype Chebyshev = Chebyshev
+  { getChebyshev :: Vector Double
+  }
+
+instance Metric Chebyshev where
+  Chebyshev v0 <-> Chebyshev v1 = minimum . map abs $ zipWith (-) v0 v1
+
+
