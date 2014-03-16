@@ -1,9 +1,10 @@
 import Data.Metric (Discrete(..), Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
 import Control.Applicative ((<$>))
 import Data.Vector (Vector(..), fromList)
+import Data.Ratio ((%))
 import Test.Framework (defaultMain, testGroup, Test)
 import Test.Framework.Providers.QuickCheck2 (testProperty)
-import Test.QuickCheck (Property, Arbitrary(..), conjoin, vector)
+import Test.QuickCheck (Property, Arbitrary(..), conjoin, vector, vectorOf, oneof, choose)
 import Test.QuickCheck.Property.Metric (prop_Metric)
 
 instance Arbitrary a => Arbitrary (Vector a) where
@@ -36,7 +37,9 @@ prop_TaxicabMetric = prop_Metric
 -- | Cosine
 
 instance Arbitrary Cosine where
-  arbitrary = Cosine <$> arbitrary 
+  arbitrary = oneof [choose (1,1000), choose (-1,-1000)]
+          >>= vectorOf 3 . return . fromRational . (%100)
+          >>= return . Cosine . fromList
 
 prop_CosineMetric :: Cosine -> Cosine -> Cosine -> Property
 prop_CosineMetric = prop_Metric

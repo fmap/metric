@@ -68,18 +68,25 @@ could travel by taxi on a rectangular grid of streets (think Manhattan.)
 > instance Metric Taxicab where
 >   Taxicab v0 <-> Taxicab v1 = foldr1 (+) . map abs $ zipWith (-) v0 v1
  
-`Cosine` wraps Cosine similarity, measuring the cosine of the angle
+`Cosine` wraps cosine similarity, measuring the cosine of the angle
 between two vectors using the Euclidean dot product formula. Unlike the
-other distance functions, this described orientation, rather than
-magnitude; this is useful when comparing tf-idf weights, as we're
-implicitly normalising for document length.
+other distance functions, this describes orientation, rather than
+magnitude; this is useful when comparing tf-idf weights, as it
+implicitly normalises for document length.
+
+Edge case: the denominator of this function is the product of the
+vectors norms; when either of the vectors have no magnitude, this
+describes division by zero. A runtime error occurs in this case.
 
 > newtype Cosine = Cosine
 >   { getCosine :: Vector Double
 >   } deriving (Eq, Show)
 > 
 > instance Metric Cosine where
->   Cosine v0 <-> Cosine v1 = (v0 `dot` v1) / (v0 |*| v1)
+>   Cosine v0 <-> Cosine v1 
+>     | norm == 0 = error "zero magnitude vector"
+>     | otherwise = (v0 `dot` v1) / norm
+>     where norm = (v0 |*| v1)
 >
 > mag :: Vector Double -> Double
 > mag = sqrt . foldr1 (+) . map (**2)
