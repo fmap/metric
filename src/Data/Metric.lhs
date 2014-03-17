@@ -12,12 +12,12 @@ Metric spaces defined over real vectors.
 >   PostOffice(..)
 > ) where
 > 
-> import Prelude hiding (zipWith, map, foldr1, maximum, replicate, length)
+> import Prelude hiding (zipWith, map, foldr1, maximum, length)
 > import Data.Function (on)
-> import Data.Vector (Vector(..), zipWith, map, foldr1, maximum, replicate, length, toList)
+> import Data.Vector (Vector(..), zipWith, map, foldr1, maximum, length)
 > import Numeric.LinearAlgebra.Algorithms (rank)
-> import Data.Packed.Matrix (Matrix(..), fromLists, trans)
-> import Data.Function.Extras (on3)
+> import Data.Vector.Extras (zero)
+> import Data.Packed.Matrix.Extras (fromVectors)
 > import Control.Applicative.Extras ((<$$>), (<$$$>))
 
 The `Metric` typeclass, as defined here, is intended to contain types that
@@ -133,13 +133,6 @@ with the origin those points that are the subject of the metric.
 >
 > colinear :: Vector Double -> Vector Double -> Vector Double -> Bool
 > colinear = (<1) . rank <$$$> fromVectors
->
-> zero :: Num a => Int -> Vector a
-> zero = flip replicate 0
->
-> fromVectors :: Vector Double -> Vector Double -> Vector Double -> Matrix Double
-> fromVectors = fromColumns `on3` toList
->   where fromColumns xs ys zs = trans $ fromLists [xs, ys, zs]
 >
 > (|+|) :: Vector Double -> Vector Double -> Double
 > (|+|) = (+) `on` mag

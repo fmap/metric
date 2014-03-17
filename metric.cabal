@@ -13,7 +13,9 @@ library
   exposed-modules:   Data.Metric
   hs-source-dirs:    src
   other-modules:     Control.Applicative.Extras,
-                     Data.Function.Extras
+                     Data.Function.Extras,
+                     Data.Vector.Extras,
+                     Data.Packed.Matrix.Extras
   build-depends:     base, vector, hmatrix
 
 test-suite metric-tests:
