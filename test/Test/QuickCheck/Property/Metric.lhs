@@ -17,7 +17,6 @@ function (M -> M), forall a,b,c in M:
 
 > prop_MetricIndiscernable :: (Eq a, Metric a) => a -> a -> Bool
 > prop_MetricIndiscernable a b = ((a <-> b) =~ 0) == (a == b)
->                             && (a == b) == ((a <-> b) =~ 0)
 
   * Symmetry: d(x,y) = d(y,x)
 
