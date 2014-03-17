@@ -12,9 +12,11 @@ Metric spaces defined over real vectors.
 >   PostOffice(..)
 > ) where
 > 
-> import Prelude hiding (zipWith, map, foldr1, maximum)
+> import Prelude hiding (zipWith, map, foldr1, maximum, replicate, length)
 > import Data.Function (on)
-> import Data.Vector (Vector(..), zipWith, map, foldr1, maximum)
+> import Data.Vector (Vector(..), zipWith, map, foldr1, maximum, replicate, length, toList)
+> import Numeric.LinearAlgebra.Algorithms (rank)
+> import Data.Packed.Matrix (Matrix(..), fromLists, trans)
 
 The `Metric` typeclass, as defined here, is intended to contain types that
 are metric spaces. Instances can be defined in terms of `distance` or the 
@@ -92,13 +94,13 @@ describes division by zero. A runtime error occurs in this case.
 > mag = sqrt . foldr1 (+) . map (**2)
 >
 > dot :: Vector Double -> Vector Double -> Double
-> dot = foldr1 (+) .:. zipWith (*)
+> dot = foldr1 (+) <$$> zipWith (*)
 >
 > (|*|) :: Vector Double -> Vector Double -> Double
 > (|*|) = (*) `on` mag
 > 
-> (.:.) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-> (.:.) = fmap . fmap
+> (<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+> (<$$>) = fmap . fmap
 
 `Chebyshev` wraps Chebyshev distance, in which the distance between two
 vectors is defined to be the maximum of their differences along any
@@ -111,10 +113,15 @@ dimension.
 > instance Metric Chebyshev where
 >   Chebyshev v0 <-> Chebyshev v1 = maximum . map abs $ zipWith (-) v0 v1
 
-Post Office distance; zero if the vectors are equal, otherwise the sum
-of their magnitudes. It's named so as letters usually need to first
-travel to the post office, irrespective of their final destination,
-provided the source and destination are distinct.
+Post Office distance; the Euclidean distance between two vectors is Euclidean
+when they are co-linear with the origin, and otherwise the sum of their
+magnitudes. It's named so as letters usually need to first travel to the post
+office, with exception to when the letter passes the destination on the way
+there.
+
+Three points are considered to be colinear if the matrix of their coordinates
+has a rank less than one. In constructing a vector here, we consider together
+with the origin those points that are the subject of the metric.
 
 > newtype PostOffice = PostOffice
 >   { getPostOffice :: Vector Double
@@ -122,8 +129,26 @@ provided the source and destination are distinct.
 > 
 > instance Metric PostOffice where
 >   PostOffice v0 <-> PostOffice v1 
->     | v0 == v1  = 0
+>     | colinear v0 v1 (zero $ length v0) = Euclidean v0 <-> Euclidean v1
 >     | otherwise = v0 |+| v1
+>
+> colinear :: Vector Double -> Vector Double -> Vector Double -> Bool
+> colinear = (<1) . rank <$$$> fromVectors
+>
+> zero :: Num a => Int -> Vector a
+> zero = flip replicate 0
+>
+> fromVectors :: Vector Double -> Vector Double -> Vector Double -> Matrix Double
+> fromVectors = fromColumns `on3` toList
+>   where fromColumns xs ys zs = trans $ fromLists [xs, ys, zs]
+>
+> (<$$$>) :: (Functor f, Functor g, Functor h) => (a -> b) -> f(g(h a)) -> f(g(h b))
+> (<$$$>) = fmap . fmap . fmap
+>
+> infixl 8 <$$$>
+>
+> on3 :: (b -> b -> b -> c) -> (a -> b) -> a -> a -> a -> c
+> g `on3` f = \x y z -> g (f x) (f y) (f z)
 >
 > (|+|) :: Vector Double -> Vector Double -> Double
 > (|+|) = (+) `on` mag

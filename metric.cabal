@@ -12,7 +12,7 @@ cabal-version:       >=1.8
 library
   exposed-modules:   Data.Metric
   hs-source-dirs:    src
-  build-depends:     base, vector
+  build-depends:     base, vector, hmatrix
 
 test-suite metric-tests:
   type:              exitcode-stdio-1.0
