@@ -17,6 +17,8 @@ Metric spaces defined over real vectors.
 > import Data.Vector (Vector(..), zipWith, map, foldr1, maximum, replicate, length, toList)
 > import Numeric.LinearAlgebra.Algorithms (rank)
 > import Data.Packed.Matrix (Matrix(..), fromLists, trans)
+> import Data.Function.Extras (on3)
+> import Control.Applicative.Extras ((<$$>), (<$$$>))
 
 The `Metric` typeclass, as defined here, is intended to contain types that
 are metric spaces. Instances can be defined in terms of `distance` or the 
@@ -98,9 +100,6 @@ describes division by zero. A runtime error occurs in this case.
 >
 > (|*|) :: Vector Double -> Vector Double -> Double
 > (|*|) = (*) `on` mag
-> 
-> (<$$>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-> (<$$>) = fmap . fmap
 
 `Chebyshev` wraps Chebyshev distance, in which the distance between two
 vectors is defined to be the maximum of their differences along any
@@ -141,14 +140,6 @@ with the origin those points that are the subject of the metric.
 > fromVectors :: Vector Double -> Vector Double -> Vector Double -> Matrix Double
 > fromVectors = fromColumns `on3` toList
 >   where fromColumns xs ys zs = trans $ fromLists [xs, ys, zs]
->
-> (<$$$>) :: (Functor f, Functor g, Functor h) => (a -> b) -> f(g(h a)) -> f(g(h b))
-> (<$$$>) = fmap . fmap . fmap
->
-> infixl 8 <$$$>
->
-> on3 :: (b -> b -> b -> c) -> (a -> b) -> a -> a -> a -> c
-> g `on3` f = \x y z -> g (f x) (f y) (f z)
 >
 > (|+|) :: Vector Double -> Vector Double -> Double
 > (|+|) = (+) `on` mag

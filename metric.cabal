@@ -12,6 +12,8 @@ cabal-version:       >=1.8
 library
   exposed-modules:   Data.Metric
   hs-source-dirs:    src
+  other-modules:     Control.Applicative.Extras,
+                     Data.Function.Extras
   build-depends:     base, vector, hmatrix
 
 test-suite metric-tests:
