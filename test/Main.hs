@@ -1,3 +1,4 @@
+import Data.Metric.String (Hamming(..), Levenshtein(..), RestrictedDamerauLevenshtein(..))
 import Data.Metric.Vector.Real (Discrete(..), Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
 import Control.Applicative ((<$>))
 import Data.Vector (Vector(..), fromList)
@@ -60,14 +61,40 @@ instance Arbitrary PostOffice where
 prop_PostOfficeMetric :: PostOffice -> PostOffice -> PostOffice -> Property
 prop_PostOfficeMetric = prop_Metric
 
+-- | Hamming
+
+instance Arbitrary Hamming where
+  arbitrary = Hamming <$> arbitrary 
+
+prop_HammingMetric :: Hamming -> Hamming -> Hamming -> Property
+prop_HammingMetric = prop_Metric
+
+-- | Levenshtein
+
+instance Arbitrary Levenshtein where
+  arbitrary = Levenshtein <$> arbitrary 
+
+prop_LevenshteinMetric :: Levenshtein -> Levenshtein -> Levenshtein -> Property
+prop_LevenshteinMetric = prop_Metric
+
+-- | Restricted Damerau Levenshtein
+
+instance Arbitrary RestrictedDamerauLevenshtein where
+  arbitrary = RestrictedDamerauLevenshtein <$> arbitrary 
+
+prop_RestrictedDamerauLevenshteinMetric :: RestrictedDamerauLevenshtein -> RestrictedDamerauLevenshtein -> RestrictedDamerauLevenshtein -> Property
+prop_RestrictedDamerauLevenshteinMetric = prop_Metric
+
 -- |
 
 main :: IO ()
 main = defaultMain . return . testGroup "QuickCheck" $
-  [ testProperty "discrete"   $ prop_DiscreteMetric
-  , testProperty "euclidean"  $ prop_EuclideanMetric
-  , testProperty "taxicab"    $ prop_TaxicabMetric
-  , testProperty "cosine"     $ prop_CosineMetric
-  , testProperty "chebyshev"  $ prop_ChebyshevMetric
-  , testProperty "postoffice" $ prop_PostOfficeMetric
+  [ testProperty "discrete"    $ prop_DiscreteMetric
+  , testProperty "euclidean"   $ prop_EuclideanMetric
+  , testProperty "taxicab"     $ prop_TaxicabMetric
+  , testProperty "cosine"      $ prop_CosineMetric
+  , testProperty "chebyshev"   $ prop_ChebyshevMetric
+  , testProperty "postoffice"  $ prop_PostOfficeMetric
+  , testProperty "hamming"     $ prop_HammingMetric
+  , testProperty "levenshtein" $ prop_LevenshteinMetric
   ]
