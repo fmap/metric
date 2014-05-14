@@ -1,6 +1,6 @@
 name:                metric
-version:             0.1.3
-synopsis:            Distance functions.
+version:             0.1.4
+synopsis:            Metric spaces.
 license:             MIT
 license-file:        LICENSE
 author:              Vikram Verma
@@ -10,7 +10,9 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 library
-  exposed-modules:   Data.Metric
+  exposed-modules:   Data.Metric,
+                     Data.Metric.Class,
+                     Data.Metric.Vector.Real
   hs-source-dirs:    src
   other-modules:     Control.Applicative.Extras,
                      Data.Function.Extras,

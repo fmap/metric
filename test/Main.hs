@@ -1,4 +1,4 @@
-import Data.Metric (Discrete(..), Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
+import Data.Metric.Vector.Real (Discrete(..), Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
 import Control.Applicative ((<$>))
 import Data.Vector (Vector(..), fromList)
 import Data.Ratio ((%))

@@ -2,8 +2,7 @@
 
 Metric spaces defined over real vectors.
 
-> module Data.Metric (
->   Metric(..),
+> module Data.Metric.Vector.Real (
 >   Discrete(..),
 >   Euclidean(..),
 >   Taxicab(..),
@@ -14,22 +13,13 @@ Metric spaces defined over real vectors.
 > 
 > import Prelude hiding (zipWith, map, foldr1, maximum, length)
 > import Data.Function (on)
-> import Data.Vector (Vector(..), zipWith, map, foldr1, maximum, length)
-> import Numeric.LinearAlgebra.Algorithms (rank)
-> import Data.Vector.Extras (zero)
 > import Data.Packed.Matrix.Extras (fromVectors)
+> import Data.Vector (Vector(..), zipWith, map, foldr1, maximum, length)
+> import Data.Vector.Extras (zero)
+> import Numeric.LinearAlgebra.Algorithms (rank)
+> import Data.Metric.Class (Metric(..))
 > import Control.Applicative.Extras ((<$$>), (<$$$>))
 
-The `Metric` typeclass, as defined here, is intended to contain types that
-are metric spaces. Instances can be defined in terms of `distance` or the 
-infix `<->`:
-
-> class Metric a where
->   (<->) :: a -> a -> Double
->   (<->) = distance 
->   distance :: a -> a -> Double
->   distance = (<->)
- 
 Real vectors can be viewed as a metric space in more than one way, as we can
 define multiple valid distance functions. To avoid ambiguous type instances,
 we define a newtype wrapper over `Vector Double` for each distance function,
