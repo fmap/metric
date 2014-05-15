@@ -64,7 +64,7 @@ prop_PostOfficeMetric = prop_Metric
 -- | Hamming
 
 instance Arbitrary Hamming where
-  arbitrary = Hamming <$> arbitrary 
+  arbitrary = Hamming <$> vector 10
 
 prop_HammingMetric :: Hamming -> Hamming -> Hamming -> Property
 prop_HammingMetric = prop_Metric
