@@ -12,6 +12,7 @@ cabal-version:       >=1.8
 library
   exposed-modules:   Data.Metric,
                      Data.Metric.Class,
+                     Data.Metric.Set,
                      Data.Metric.String,
                      Data.Metric.Vector.Real
   hs-source-dirs:    src
@@ -21,6 +22,7 @@ library
                      Data.List.Extras,
                      Data.Vector.Extras,
                      Data.Packed.Matrix.Extras
+  other-extensions:  GADTs
   build-depends:     base, vector, hmatrix, edit-distance, data-default
 
 test-suite metric-tests:

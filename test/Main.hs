@@ -1,5 +1,6 @@
+import Data.Metric.Set (Discrete(..))
 import Data.Metric.String (Hamming(..), Levenshtein(..), RestrictedDamerauLevenshtein(..))
-import Data.Metric.Vector.Real (Discrete(..), Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
+import Data.Metric.Vector.Real (Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
 import Control.Applicative ((<$>))
 import Data.Vector (Vector(..), fromList)
 import Data.Ratio ((%))
@@ -13,10 +14,10 @@ instance Arbitrary a => Arbitrary (Vector a) where
 
 -- | Discrete
 
-instance Arbitrary Discrete where
-  arbitrary = Discrete <$> arbitrary 
+instance (Eq a, Arbitrary a) => Arbitrary (Discrete a) where
+  arbitrary = Element <$> arbitrary
 
-prop_DiscreteMetric :: Discrete -> Discrete -> Discrete -> Property
+prop_DiscreteMetric :: Discrete Char -> Discrete Char -> Discrete Char -> Property
 prop_DiscreteMetric = prop_Metric
 
 -- | Euclidean

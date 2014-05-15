@@ -3,7 +3,6 @@
 Metric spaces defined over real vectors.
 
 > module Data.Metric.Vector.Real (
->   Discrete(..),
 >   Euclidean(..),
 >   Taxicab(..),
 >   Cosine(..),
@@ -24,20 +23,6 @@ Real vectors can be viewed as a metric space in more than one way, as we can
 define multiple valid distance functions. To avoid ambiguous type instances,
 we define a newtype wrapper over `Vector Double` for each distance function,
 and make that `newtype` an instance of `Metric`.
-
-`Discrete` wraps the discrete metric. If to elements are equal, the
-distance is 0, otherwise it is 1. This *could* be applied between any
-two `Eq` instances, but here it is specialised for want of a consistent
-interface.
-
-> newtype Discrete = Discrete
->   { getDiscrete :: Vector Double
->   } deriving (Eq, Show)
-> 
-> instance Metric Discrete where
->   Discrete v0 <-> Discrete v1 
->     | v0 == v1  = 0 
->     | otherwise = 1
  
 `Euclidean` wraps Euclidean distance, our usual conception of distance
 between two points on a plane. The square root of the sum of the

@@ -1,16 +1,17 @@
 module Data.Metric (
   Metric(..),
   Discrete(..),
+  Hamming(..),
+  Levenshtein(..),
+  RestrictedDamerauLevenshtein(..),
   Euclidean(..),
   Taxicab(..),
   Cosine(..),
   Chebyshev(..),
-  PostOffice(..),
-  Hamming(..),
-  Levenshtein(..),
-  RestrictedDamerauLevenshtein(..)
+  PostOffice(..)
 ) where
 
 import Data.Metric.Class (Metric(..))
-import Data.Metric.Vector.Real (Discrete(..), Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
+import Data.Metric.Set (Discrete(..))
 import Data.Metric.String (Hamming(..), Levenshtein(..), RestrictedDamerauLevenshtein(..)) 
+import Data.Metric.Vector.Real (Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
