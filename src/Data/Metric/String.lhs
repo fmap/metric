@@ -39,9 +39,6 @@ heavily optimised implementation provided by Max Bolingbroke's excellent
 > instance Metric Levenshtein where
 >   distance = fromIntegral <$$> levenshteinDistance def `on` getLevenshtein
 
-  * Levenshtein distance with the transposition operation.
-  * Restricted: meaning no substring is edited more than once.
-
 The Restricted-Damerau Levenshtein distance extends Levenshtein distance
 (above), with an additional operation: the transposition of two
 adjacent characters. It is 'restricted' in that the algorithm computes
