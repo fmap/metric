@@ -12,6 +12,7 @@ Metric spaces defined over strings; i.e. edit distance.
 > import Data.Function (on)
 > import Data.List.Extras (count)
 > import Data.Metric.Class (Metric(..))
+> import Data.Metric.Set (Discrete(..))
 > import Text.EditDistance (levenshteinDistance, restrictedDamerauLevenshteinDistance)
 
 `Hamming` wraps Hamming distance: the number of positions between two
@@ -24,7 +25,7 @@ required to change one of the strings into the other.
 >   } deriving (Eq, Show)
 > 
 > instance Metric Hamming where
->   distance = count . filter id <$$> zipWith (/=) `on` getHamming
+>   distance = count <$$> zipWith (distance `on` Discrete) `on` getHamming
 
 `Levenshtein` wraps Levenshtein distance: the minimum number of
 single-character operations-- insertions, deletions or substitutions--
