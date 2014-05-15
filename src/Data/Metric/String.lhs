@@ -1,6 +1,10 @@
 Metric spaces defined over strings; i.e. edit distance.
 
-> module Data.Metric.String (Hamming(..), Levenshtein(..), RestrictedDamerauLevenshtein(..)) where
+> module Data.Metric.String (
+>   Hamming(..),
+>   Levenshtein(..),
+>   RestrictedDamerauLevenshtein(..)
+> ) where
 >
 > import Control.Applicative.Extras ((<$$>))
 > import Data.Default (Default(def))
@@ -10,8 +14,10 @@ Metric spaces defined over strings; i.e. edit distance.
 > import Data.Metric.Class (Metric(..))
 > import Text.EditDistance (levenshteinDistance, restrictedDamerauLevenshteinDistance)
 
-  * Number of positions at which the strings differ.
-  * Only a metric space for strings of fixed length.
+`Hamming` wraps Hamming distance: the number of positions between two
+*fixed length* strings at which the corresponding symbols are different.
+Equivalently, this can be seen as the minimum number of substitutions
+required to change one of the strings into the other.
 
 > newtype Hamming = Hamming
 >   { getHamming :: String
@@ -20,7 +26,11 @@ Metric spaces defined over strings; i.e. edit distance.
 > instance Metric Hamming where
 >   distance = count . filter id <$$> zipWith (/=) `on` getHamming
 
-  * The number of deletion, insertion, and substitution operations needed for equality.
+`Levenshtein` wraps Levenshtein distance: the minimum number of
+single-character operations-- insertions, deletions or substitutions--
+required to make two strings equal. Here, we in effect re-export the
+heavily optimised implementation provided by Max Bolingbroke's excellent
+`edit-distance` package.
 
 > newtype Levenshtein = Levenshtein
 >   { getLevenshtein :: String
@@ -31,6 +41,13 @@ Metric spaces defined over strings; i.e. edit distance.
 
   * Levenshtein distance with the transposition operation.
   * Restricted: meaning no substring is edited more than once.
+
+The Restricted-Damerau Levenshtein distance extends Levenshtein distance
+(above), with an additional operation: the transposition of two
+adjacent characters. It is 'restricted' in that the algorithm computes
+the minimum number of edit operations **under the condition that no
+substring is edited more than once.** Here, again, we're wrapping an
+implementation from `edit-distance`.
 
 > newtype RestrictedDamerauLevenshtein = RestrictedDamerauLevenshtein
 >   { getRestrictedDamerauLevenshtein :: String
