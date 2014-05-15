@@ -14,10 +14,10 @@ distance is 0, otherwise it is 1. This can be applied between any
 two `Eq` instances; i.e. any pair of non-empty sets.
 
 > data Discrete a where 
->   Element :: Eq a => a -> Discrete a
+>   Discrete :: Eq a => a -> Discrete a
 >
 > instance Metric (Discrete a) where
->   Element a <-> Element b
+>   Discrete a <-> Discrete b
 >     | a == b    = 0
 >     | otherwise = 1
 >
@@ -25,4 +25,4 @@ two `Eq` instances; i.e. any pair of non-empty sets.
 >   (==) = (0==) <$$> distance
 >
 > instance Show a => Show (Discrete a) where
->   show (Element a) = "Discrete " ++ show a
+>   show (Discrete a) = "Discrete " ++ show a

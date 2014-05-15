@@ -15,7 +15,7 @@ instance Arbitrary a => Arbitrary (Vector a) where
 -- | Discrete
 
 instance (Eq a, Arbitrary a) => Arbitrary (Discrete a) where
-  arbitrary = Element <$> arbitrary
+  arbitrary = Discrete <$> arbitrary
 
 prop_DiscreteMetric :: Discrete Char -> Discrete Char -> Discrete Char -> Property
 prop_DiscreteMetric = prop_Metric
