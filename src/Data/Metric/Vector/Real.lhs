@@ -48,7 +48,7 @@ differences between corresponding coordinates ;-).
 >   } deriving (Eq, Show)
 > 
 > instance Metric Euclidean where
->   Euclidean v0 <-> Euclidean v1 = sqrt . foldr1 (+) . map (**2) $ zipWith (-) v0 v1
+>   distance = sqrt . foldr1 (+) . map (**2) <$$> zipWith (-) `on` getEuclidean
 
 `Taxicab` describes the length of the path connecting the two vectors
 along only vertical and horizontal lines (`_|`) without backtracing.
@@ -60,7 +60,7 @@ could travel by taxi on a rectangular grid of streets (think Manhattan.)
 >   } deriving (Eq, Show)
 > 
 > instance Metric Taxicab where
->   Taxicab v0 <-> Taxicab v1 = foldr1 (+) . map abs $ zipWith (-) v0 v1
+>   distance = foldr1 (+) . map abs <$$> zipWith (-) `on` getTaxicab
  
 `Cosine` wraps cosine similarity, measuring the cosine of the angle
 between two vectors using the Euclidean dot product formula. Unlike the
@@ -100,7 +100,7 @@ dimension.
 >   } deriving (Eq, Show)
 > 
 > instance Metric Chebyshev where
->   Chebyshev v0 <-> Chebyshev v1 = maximum . map abs $ zipWith (-) v0 v1
+>   distance = maximum . map abs <$$> zipWith (-) `on` getChebyshev
 
 Post Office distance; the Euclidean distance between two vectors is Euclidean
 when they are co-linear with the origin, and otherwise the sum of their
