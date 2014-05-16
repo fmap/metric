@@ -23,10 +23,10 @@ library
                      Data.Vector.Extras,
                      Data.Packed.Matrix.Extras
   other-extensions:  GADTs
-  build-depends:     base, vector, hmatrix, edit-distance, data-default
+  build-depends:     base == 4.*, vector, hmatrix, edit-distance, data-default
 
 test-suite metric-tests:
   type:              exitcode-stdio-1.0
   main-is:           Main.hs
   hs-source-dirs:    test
-  build-depends:     base, vector, metric, QuickCheck, test-framework, test-framework-quickcheck2
+  build-depends:     base == 4.*, vector, metric, QuickCheck, test-framework, test-framework-quickcheck2
