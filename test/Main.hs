@@ -1,6 +1,6 @@
 import Data.Metric.Set (Discrete(..))
 import Data.Metric.String (Hamming(..), Levenshtein(..), RestrictedDamerauLevenshtein(..))
-import Data.Metric.Vector.Real (Euclidean(..), Taxicab(..), Cosine(..), Chebyshev(..), PostOffice(..))
+import Data.Metric.Vector.Real (Euclidean(..), Taxicab(..), Chebyshev(..), PostOffice(..))
 import Control.Applicative ((<$>))
 import Data.Vector (Vector(..), fromList)
 import Data.Ratio ((%))
@@ -35,16 +35,6 @@ instance Arbitrary Taxicab where
 
 prop_TaxicabMetric :: Taxicab -> Taxicab -> Taxicab -> Property
 prop_TaxicabMetric = prop_Metric
-
--- | Cosine
-
-instance Arbitrary Cosine where
-  arbitrary = oneof [choose (1,1000), choose (-1,-1000)]
-          >>= vectorOf 3 . return . fromRational . (%100)
-          >>= return . Cosine . fromList
-
-prop_CosineMetric :: Cosine -> Cosine -> Cosine -> Property
-prop_CosineMetric = prop_Metric
 
 -- | Chebyshev
 
@@ -93,7 +83,6 @@ main = defaultMain . return . testGroup "QuickCheck" $
   [ testProperty "discrete"    $ prop_DiscreteMetric
   , testProperty "euclidean"   $ prop_EuclideanMetric
   , testProperty "taxicab"     $ prop_TaxicabMetric
-  , testProperty "cosine"      $ prop_CosineMetric
   , testProperty "chebyshev"   $ prop_ChebyshevMetric
   , testProperty "postoffice"  $ prop_PostOfficeMetric
   , testProperty "hamming"     $ prop_HammingMetric

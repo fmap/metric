@@ -5,7 +5,6 @@ Metric spaces defined over real vectors.
 > module Data.Metric.Vector.Real (
 >   Euclidean(..),
 >   Taxicab(..),
->   Cosine(..),
 >   Chebyshev(..),
 >   PostOffice(..)
 > ) where
@@ -46,35 +45,6 @@ could travel by taxi on a rectangular grid of streets (think Manhattan.)
 > 
 > instance Metric Taxicab where
 >   distance = sum . map abs <$$> zipWith (-) `on` getTaxicab
- 
-`Cosine` wraps cosine similarity, measuring the cosine of the angle
-between two vectors using the Euclidean dot product formula. Unlike the
-other distance functions, this describes orientation, rather than
-magnitude; this is useful when comparing tf-idf weights, as it
-implicitly normalises for document length.
-
-Edge case: the denominator of this function is the product of the
-vectors norms; when either of the vectors have no magnitude, this
-describes division by zero. A runtime error occurs in this case.
-
-> newtype Cosine = Cosine
->   { getCosine :: Vector Double
->   } deriving (Eq, Show)
-> 
-> instance Metric Cosine where
->   Cosine v0 <-> Cosine v1 
->     | norm == 0 = error "zero magnitude vector"
->     | otherwise = (v0 `dot` v1) / norm
->     where norm = (v0 |*| v1)
->
-> mag :: Vector Double -> Double
-> mag = sqrt . sum . map (**2)
->
-> dot :: Vector Double -> Vector Double -> Double
-> dot = sum <$$> zipWith (*)
->
-> (|*|) :: Vector Double -> Vector Double -> Double
-> (|*|) = (*) `on` mag
 
 `Chebyshev` wraps Chebyshev distance, in which the distance between two
 vectors is defined to be the maximum of their differences along any
@@ -111,3 +81,6 @@ with the origin those points that are the subject of the metric.
 >
 > (|+|) :: Vector Double -> Vector Double -> Double
 > (|+|) = (+) `on` mag
+>
+> mag :: Vector Double -> Double
+> mag = sqrt . sum . map (**2)
