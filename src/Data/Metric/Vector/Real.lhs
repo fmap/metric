@@ -10,10 +10,10 @@ Metric spaces defined over real vectors.
 >   PostOffice(..)
 > ) where
 > 
-> import Prelude hiding (zipWith, map, foldr1, maximum, length)
+> import Prelude hiding (zipWith, map, maximum, length, sum)
 > import Data.Function (on)
 > import Data.Packed.Matrix.Extras (fromVectors)
-> import Data.Vector (Vector(..), zipWith, map, foldr1, maximum, length)
+> import Data.Vector (Vector(..), zipWith, map, maximum, length, sum)
 > import Data.Vector.Extras (zero)
 > import Numeric.LinearAlgebra.Algorithms (rank)
 > import Data.Metric.Class (Metric(..))
@@ -33,7 +33,7 @@ differences between corresponding coordinates ;-).
 >   } deriving (Eq, Show)
 > 
 > instance Metric Euclidean where
->   distance = sqrt . foldr1 (+) . map (**2) <$$> zipWith (-) `on` getEuclidean
+>   distance = sqrt . sum . map (**2) <$$> zipWith (-) `on` getEuclidean
 
 `Taxicab` describes the length of the path connecting the two vectors
 along only vertical and horizontal lines (`_|`) without backtracing.
@@ -45,7 +45,7 @@ could travel by taxi on a rectangular grid of streets (think Manhattan.)
 >   } deriving (Eq, Show)
 > 
 > instance Metric Taxicab where
->   distance = foldr1 (+) . map abs <$$> zipWith (-) `on` getTaxicab
+>   distance = sum . map abs <$$> zipWith (-) `on` getTaxicab
  
 `Cosine` wraps cosine similarity, measuring the cosine of the angle
 between two vectors using the Euclidean dot product formula. Unlike the
@@ -68,10 +68,10 @@ describes division by zero. A runtime error occurs in this case.
 >     where norm = (v0 |*| v1)
 >
 > mag :: Vector Double -> Double
-> mag = sqrt . foldr1 (+) . map (**2)
+> mag = sqrt . sum . map (**2)
 >
 > dot :: Vector Double -> Vector Double -> Double
-> dot = foldr1 (+) <$$> zipWith (*)
+> dot = sum <$$> zipWith (*)
 >
 > (|*|) :: Vector Double -> Vector Double -> Double
 > (|*|) = (*) `on` mag
