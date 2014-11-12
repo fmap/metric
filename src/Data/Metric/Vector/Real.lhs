@@ -9,13 +9,12 @@ Metric spaces defined over real vectors.
 >   PostOffice(..)
 > ) where
 > 
-> import Prelude hiding (zipWith, map, maximum, length, sum)
+> import Prelude hiding (replicate, zipWith, map, maximum, length, sum)
 > import Data.Function (on)
 > import Data.Functor.Infix ((<$$>),(<$$$>))
 > import Data.Metric.Class (Metric(..))
-> import Data.Packed.Matrix.Extras (fromVectors)
-> import Data.Vector (Vector(..), zipWith, map, maximum, length, sum)
-> import Data.Vector.Extras (zero)
+> import Data.Packed.Matrix (Matrix(..), fromLists, trans)
+> import Data.Vector (Vector(..), replicate, toList, zipWith, map, maximum, length, sum)
 > import Numeric.LinearAlgebra.Algorithms (rank)
 
 Real vectors can be viewed as a metric space in more than one way, as we can
@@ -73,11 +72,15 @@ with the origin those points that are the subject of the metric.
 > 
 > instance Metric PostOffice where
 >   PostOffice v0 <-> PostOffice v1 
->     | colinear v0 v1 (zero $ length v0) = Euclidean v0 <-> Euclidean v1
+>     | colinear v0 v1 (length v0 `replicate` 0) = Euclidean v0 <-> Euclidean v1
 >     | otherwise = v0 |+| v1
 >
 > colinear :: Vector Double -> Vector Double -> Vector Double -> Bool
 > colinear = (<1) . rank <$$$> fromVectors
+>
+> fromVectors :: Vector Double -> Vector Double -> Vector Double -> Matrix Double
+> fromVectors = \xs ys zs -> trans $ fromLists [toList xs, toList ys, toList zs]
+>   where fromColumns xs ys zs = trans $ fromLists [xs, ys, zs]
 >
 > (|+|) :: Vector Double -> Vector Double -> Double
 > (|+|) = (+) `on` mag
