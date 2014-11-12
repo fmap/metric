@@ -12,8 +12,10 @@ Metric spaces defined over real vectors.
 > import Prelude hiding (replicate, zipWith, map, maximum, length, sum)
 > import Data.Function (on)
 > import Data.Functor.Infix ((<$$>),(<$$$>))
-> import Data.Metric.Class (Metric(..))
+> import Data.Metric.Class (Metric)
 > import Data.Packed.Matrix (Matrix(..), fromLists, trans)
+> import Data.Premetric (Premetric(..))
+> import Data.Semimetric (Semimetric)
 > import Data.Vector (Vector(..), replicate, toList, zipWith, map, maximum, length, sum)
 > import Numeric.LinearAlgebra.Algorithms (rank)
 
@@ -30,8 +32,11 @@ differences between corresponding coordinates ;-).
 >   { getEuclidean :: Vector Double 
 >   } deriving (Eq, Show)
 > 
-> instance Metric Euclidean where
+> instance Premetric Euclidean where
 >   distance = sqrt . sum . map (**2) <$$> zipWith (-) `on` getEuclidean
+>
+> instance Semimetric Euclidean
+> instance Metric Euclidean
 
 `Taxicab` describes the length of the path connecting the two vectors
 along only vertical and horizontal lines (`_|`) without backtracing.
@@ -42,8 +47,11 @@ could travel by taxi on a rectangular grid of streets (think Manhattan.)
 >   { getTaxicab :: Vector Double
 >   } deriving (Eq, Show)
 > 
-> instance Metric Taxicab where
+> instance Premetric Taxicab where
 >   distance = sum . map abs <$$> zipWith (-) `on` getTaxicab
+>
+> instance Semimetric Taxicab
+> instance Metric Taxicab
 
 `Chebyshev` wraps Chebyshev distance, in which the distance between two
 vectors is defined to be the maximum of their differences along any
@@ -53,8 +61,11 @@ dimension.
 >   { getChebyshev :: Vector Double
 >   } deriving (Eq, Show)
 > 
-> instance Metric Chebyshev where
+> instance Premetric Chebyshev where
 >   distance = maximum . map abs <$$> zipWith (-) `on` getChebyshev
+>
+> instance Semimetric Chebyshev
+> instance Metric Chebyshev
 
 Post Office distance; the Euclidean distance between two vectors is Euclidean
 when they are co-linear with the origin, and otherwise the sum of their
@@ -70,10 +81,13 @@ with the origin those points that are the subject of the metric.
 >   { getPostOffice :: Vector Double
 >   } deriving (Eq, Show)
 > 
-> instance Metric PostOffice where
+> instance Premetric PostOffice where
 >   PostOffice v0 <-> PostOffice v1 
 >     | colinear v0 v1 (length v0 `replicate` 0) = Euclidean v0 <-> Euclidean v1
 >     | otherwise = v0 |+| v1
+>
+> instance Semimetric PostOffice
+> instance Metric PostOffice
 >
 > colinear :: Vector Double -> Vector Double -> Vector Double -> Bool
 > colinear = (<1) . rank <$$$> fromVectors

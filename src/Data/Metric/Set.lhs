@@ -6,8 +6,10 @@ Metric spaces defined over arbitrary sets.
 >   Discrete(..)
 > ) where
 >
-> import Data.Metric.Class (Metric(..))
 > import Data.Functor.Infix ((<$$>))
+> import Data.Metric.Class (Metric)
+> import Data.Premetric (Premetric(..))
+> import Data.Semimetric (Semimetric)
 
 `Discrete` wraps the discrete metric. If to elements are equal, the
 distance is 0, otherwise it is 1. This can be applied between any
@@ -16,10 +18,13 @@ two `Eq` instances; i.e. any pair of non-empty sets.
 > data Discrete a where 
 >   Discrete :: Eq a => a -> Discrete a
 >
-> instance Metric (Discrete a) where
+> instance Premetric (Discrete a) where
 >   Discrete a <-> Discrete b
 >     | a == b    = 0
 >     | otherwise = 1
+>
+> instance Semimetric (Discrete a)
+> instance Metric (Discrete a)
 >
 > instance Eq (Discrete a) where
 >   (==) = (0==) <$$> distance

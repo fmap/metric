@@ -9,8 +9,10 @@ Metric spaces defined over strings; i.e. edit distance.
 > import Data.Default (Default(..))
 > import Data.Function (on)
 > import Data.Functor.Infix ((<$$>))
-> import Data.Metric.Class (Metric(..))
+> import Data.Metric.Class (Metric)
 > import Data.Metric.Set (Discrete(..))
+> import Data.Premetric (Premetric(..))
+> import Data.Semimetric (Semimetric)
 > import Text.EditDistance (levenshteinDistance, restrictedDamerauLevenshteinDistance, Costs(..), EditCosts(..))
 
 `Hamming` wraps Hamming distance: the number of positions between two
@@ -21,9 +23,12 @@ required to change one of the strings into the other.
 > newtype Hamming = Hamming
 >   { getHamming :: String
 >   } deriving (Eq, Show)
-> 
-> instance Metric Hamming where
+>
+> instance Premetric Hamming where
 >   distance = count <$$> zipWith (distance `on` Discrete) `on` getHamming
+>
+> instance Semimetric Hamming
+> instance Metric Hamming
 >
 > count :: Num b => [a] -> b
 > count = fromIntegral . length
@@ -38,8 +43,11 @@ heavily optimised implementation provided by Max Bolingbroke's excellent
 >   { getLevenshtein :: String
 >   } deriving (Eq, Show)
 >
-> instance Metric Levenshtein where
+> instance Premetric Levenshtein where
 >   distance = fromIntegral <$$> levenshteinDistance def `on` getLevenshtein
+>
+> instance Semimetric Levenshtein
+> instance Metric Levenshtein
 
 For sake of simplicity, we have associated each operation with a fixed edit
 cost:
@@ -61,5 +69,9 @@ implementation from `edit-distance`.
 >   { getRestrictedDamerauLevenshtein :: String
 >   } deriving (Eq, Show)
 >
-> instance Metric RestrictedDamerauLevenshtein where
+> instance Premetric RestrictedDamerauLevenshtein where
 >   distance = fromIntegral <$$> restrictedDamerauLevenshteinDistance def `on` getRestrictedDamerauLevenshtein
+>
+> instance Semimetric RestrictedDamerauLevenshtein
+> instance Metric RestrictedDamerauLevenshtein
+>

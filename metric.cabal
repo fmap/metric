@@ -15,6 +15,8 @@ library
                      Data.Metric.Set,
                      Data.Metric.String,
                      Data.Metric.Vector.Real,
+                     Data.Premetric,
+                     Data.Semimetric,
                      Test.QuickCheck.Property.Metric
   hs-source-dirs:    src, test
   other-extensions:  GADTs
