@@ -6,8 +6,8 @@ Metric spaces defined over arbitrary sets.
 >   Discrete(..)
 > ) where
 >
-> import Control.Applicative.Extras ((<$$>))
 > import Data.Metric.Class (Metric(..))
+> import Data.Functor.Infix ((<$$>))
 
 `Discrete` wraps the discrete metric. If to elements are equal, the
 distance is 0, otherwise it is 1. This can be applied between any

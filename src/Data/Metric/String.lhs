@@ -6,10 +6,10 @@ Metric spaces defined over strings; i.e. edit distance.
 >   RestrictedDamerauLevenshtein(..)
 > ) where
 >
-> import Control.Applicative.Extras ((<$$>))
 > import Data.Default (Default(def))
 > import Data.Default.Instances.EditDistance ()
 > import Data.Function (on)
+> import Data.Functor.Infix ((<$$>))
 > import Data.List.Extras (count)
 > import Data.Metric.Class (Metric(..))
 > import Data.Metric.Set (Discrete(..))

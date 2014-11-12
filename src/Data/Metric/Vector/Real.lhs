@@ -11,12 +11,12 @@ Metric spaces defined over real vectors.
 > 
 > import Prelude hiding (zipWith, map, maximum, length, sum)
 > import Data.Function (on)
+> import Data.Functor.Infix ((<$$>),(<$$$>))
+> import Data.Metric.Class (Metric(..))
 > import Data.Packed.Matrix.Extras (fromVectors)
 > import Data.Vector (Vector(..), zipWith, map, maximum, length, sum)
 > import Data.Vector.Extras (zero)
 > import Numeric.LinearAlgebra.Algorithms (rank)
-> import Data.Metric.Class (Metric(..))
-> import Control.Applicative.Extras ((<$$>), (<$$$>))
 
 Real vectors can be viewed as a metric space in more than one way, as we can
 define multiple valid distance functions. To avoid ambiguous type instances,
