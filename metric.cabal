@@ -14,10 +14,11 @@ library
                      Data.Metric.Class,
                      Data.Metric.Set,
                      Data.Metric.String,
-                     Data.Metric.Vector.Real
-  hs-source-dirs:    src
+                     Data.Metric.Vector.Real,
+                     Test.QuickCheck.Property.Metric
+  hs-source-dirs:    src, test
   other-extensions:  GADTs
-  build-depends:     base == 4.*, vector, hmatrix, edit-distance, data-default, functor-infix
+  build-depends:     base == 4.*, vector, hmatrix, edit-distance, data-default, functor-infix, QuickCheck
 
 test-suite metric-tests:
   type:              exitcode-stdio-1.0
